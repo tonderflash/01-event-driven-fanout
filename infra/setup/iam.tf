@@ -49,3 +49,67 @@ resource "aws_iam_user_policy_attachment" "tf_backend" {
   policy_arn = aws_iam_policy.tf_backend.arn
 }
 
+#########################################################
+# Policy for Deploy infrastructure resources            #
+#########################################################
+
+data "aws_iam_policy_document" "deploy_resources" {
+  # S3 permissions
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:CreateBucket",
+      "s3:DeleteBucket",
+      "s3:PutBucketNotification",
+      "s3:GetBucketNotification",
+      "s3:PutBucketTagging",
+      "s3:GetBucketTagging",
+      "s3:PutBucketPolicy",
+      "s3:GetBucketPolicy",
+      "s3:DeleteBucketPolicy"
+    ]
+    resources = [
+      "arn:aws:s3:::orders",
+      "arn:aws:s3:::orders/*"
+    ]
+  }
+
+  # SNS permissions
+  statement {
+    effect = "Allow"
+    actions = [
+      "sns:CreateTopic",
+      "sns:DeleteTopic",
+      "sns:GetTopicAttributes",
+      "sns:SetTopicAttributes",
+      "sns:ListTopics",
+      "sns:TagResource",
+      "sns:UntagResource"
+    ]
+    resources = [
+      "arn:aws:sns:*:*:s3-event-notification-topic"
+    ]
+  }
+
+  # IAM permissions for SNS topic policies
+  statement {
+    effect = "Allow"
+    actions = [
+      "iam:GetRole",
+      "iam:PassRole"
+    ]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_policy" "deploy_resources" {
+  name        = "${aws_iam_user.cd.name}-deploy-resources"
+  description = "Allow user to create and manage deployment resources (S3, SNS)"
+  policy      = data.aws_iam_policy_document.deploy_resources.json
+}
+
+resource "aws_iam_user_policy_attachment" "deploy_resources" {
+  user       = aws_iam_user.cd.name
+  policy_arn = aws_iam_policy.deploy_resources.arn
+}
+
