@@ -120,7 +120,40 @@ data "aws_iam_policy_document" "deploy_resources" {
       
       # Transfer acceleration
       "s3:GetAccelerateConfiguration",
-      "s3:PutAccelerateConfiguration"
+      "s3:PutAccelerateConfiguration",
+      
+      # Object Lock
+      "s3:GetBucketObjectLockConfiguration",
+      "s3:PutBucketObjectLockConfiguration",
+      
+      # Metrics
+      "s3:GetBucketMetricsConfiguration",
+      "s3:PutBucketMetricsConfiguration",
+      "s3:DeleteBucketMetricsConfiguration",
+      "s3:ListBucketMetricsConfigurations",
+      
+      # Analytics
+      "s3:GetBucketAnalyticsConfiguration",
+      "s3:PutBucketAnalyticsConfiguration",
+      "s3:DeleteBucketAnalyticsConfiguration",
+      "s3:ListBucketAnalyticsConfigurations",
+      
+      # Inventory
+      "s3:GetBucketInventoryConfiguration",
+      "s3:PutBucketInventoryConfiguration",
+      "s3:DeleteBucketInventoryConfiguration",
+      "s3:ListBucketInventoryConfigurations",
+      
+      # Intelligent Tiering
+      "s3:GetBucketIntelligentTieringConfiguration",
+      "s3:PutBucketIntelligentTieringConfiguration",
+      "s3:DeleteBucketIntelligentTieringConfiguration",
+      "s3:ListBucketIntelligentTieringConfigurations",
+      
+      # Ownership Controls
+      "s3:GetBucketOwnershipControls",
+      "s3:PutBucketOwnershipControls",
+      "s3:DeleteBucketOwnershipControls"
     ]
     resources = [
       "arn:aws:s3:::event-driven-orders-*",
