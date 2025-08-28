@@ -69,8 +69,8 @@ data "aws_iam_policy_document" "deploy_resources" {
       "s3:DeleteBucketPolicy"
     ]
     resources = [
-      "arn:aws:s3:::orders",
-      "arn:aws:s3:::orders/*"
+      "arn:aws:s3:::event-driven-orders-*",
+      "arn:aws:s3:::event-driven-orders-*/*"
     ]
   }
 
@@ -84,7 +84,8 @@ data "aws_iam_policy_document" "deploy_resources" {
       "sns:SetTopicAttributes",
       "sns:ListTopics",
       "sns:TagResource",
-      "sns:UntagResource"
+      "sns:UntagResource",
+      "sns:ListTagsForResource"
     ]
     resources = [
       "arn:aws:sns:*:*:s3-event-notification-topic"
