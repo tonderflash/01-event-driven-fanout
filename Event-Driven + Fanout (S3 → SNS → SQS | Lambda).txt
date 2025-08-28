@@ -14,3 +14,11 @@ Lambda B: genera una “mini-respuesta” y la publica en otra cola (pipe).
 IaC simple (SAM/CloudFormation/Terraform) + README.
 Checklist Domain 1: event-driven, fanout, desacoplamiento, asíncrono, uso SDKs, mensajería, idempotencia en consumidores (SQS puede duplicar).
 Stretch: DLQ para la cola principal + retries con backoff y jitter.
+
+
+🎯 Próximos pasos:
+Crear las colas SQS
+Crear las suscripciones
+Crear las funciones Lambda
+Configurar permisos IAM
+Implementar la lógica de procesamiento

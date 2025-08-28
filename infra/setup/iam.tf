@@ -64,92 +64,92 @@ data "aws_iam_policy_document" "deploy_resources" {
       "s3:ListBucket",
       "s3:HeadBucket",
       "s3:GetBucketLocation",
-      
+
       # Versioning
       "s3:GetBucketVersioning",
       "s3:PutBucketVersioning",
-      
+
       # Notifications
       "s3:PutBucketNotification",
       "s3:GetBucketNotification",
-      
+
       # Tagging
       "s3:PutBucketTagging",
       "s3:GetBucketTagging",
-      
+
       # Policies and ACLs
       "s3:PutBucketPolicy",
       "s3:GetBucketPolicy",
       "s3:DeleteBucketPolicy",
       "s3:PutBucketAcl",
       "s3:GetBucketAcl",
-      
+
       # CORS
       "s3:GetBucketCORS",
       "s3:PutBucketCORS",
       "s3:DeleteBucketCORS",
-      
+
       # Encryption
       "s3:GetEncryptionConfiguration",
       "s3:PutEncryptionConfiguration",
-      
+
       # Lifecycle
       "s3:GetLifecycleConfiguration",
       "s3:PutLifecycleConfiguration",
-      
+
       # Public Access Block
       "s3:GetBucketPublicAccessBlock",
       "s3:PutBucketPublicAccessBlock",
-      
+
       # Logging
       "s3:GetBucketLogging",
       "s3:PutBucketLogging",
-      
+
       # Website configuration
       "s3:GetBucketWebsite",
       "s3:PutBucketWebsite",
       "s3:DeleteBucketWebsite",
-      
+
       # Replication
       "s3:GetReplicationConfiguration",
       "s3:PutReplicationConfiguration",
-      
+
       # Request payment
       "s3:GetBucketRequestPayment",
       "s3:PutBucketRequestPayment",
-      
+
       # Transfer acceleration
       "s3:GetAccelerateConfiguration",
       "s3:PutAccelerateConfiguration",
-      
+
       # Object Lock
       "s3:GetBucketObjectLockConfiguration",
       "s3:PutBucketObjectLockConfiguration",
-      
+
       # Metrics
       "s3:GetBucketMetricsConfiguration",
       "s3:PutBucketMetricsConfiguration",
       "s3:DeleteBucketMetricsConfiguration",
       "s3:ListBucketMetricsConfigurations",
-      
+
       # Analytics
       "s3:GetBucketAnalyticsConfiguration",
       "s3:PutBucketAnalyticsConfiguration",
       "s3:DeleteBucketAnalyticsConfiguration",
       "s3:ListBucketAnalyticsConfigurations",
-      
+
       # Inventory
       "s3:GetBucketInventoryConfiguration",
       "s3:PutBucketInventoryConfiguration",
       "s3:DeleteBucketInventoryConfiguration",
       "s3:ListBucketInventoryConfigurations",
-      
+
       # Intelligent Tiering
       "s3:GetBucketIntelligentTieringConfiguration",
       "s3:PutBucketIntelligentTieringConfiguration",
       "s3:DeleteBucketIntelligentTieringConfiguration",
       "s3:ListBucketIntelligentTieringConfigurations",
-      
+
       # Ownership Controls
       "s3:GetBucketOwnershipControls",
       "s3:PutBucketOwnershipControls",
@@ -176,6 +176,44 @@ data "aws_iam_policy_document" "deploy_resources" {
     ]
     resources = [
       "arn:aws:sns:*:*:s3-event-notification-topic"
+    ]
+  }
+
+  # SQS permissions
+  statement {
+    effect = "Allow"
+    actions = [
+      "sqs:CreateQueue",
+      "sqs:DeleteQueue",
+      "sqs:GetQueueAttributes",
+      "sqs:SetQueueAttributes",
+      "sqs:ListQueues",
+      "sqs:TagQueue",
+      "sqs:UntagQueue",
+      "sqs:ListQueueTags",
+      "sqs:GetQueueUrl",
+      "sqs:PurgeQueue"
+    ]
+    resources = [
+      "arn:aws:sqs:*:*:orders-processing-queue",
+      "arn:aws:sqs:*:*:orders-processing-dlq"
+    ]
+  }
+
+  # SNS Subscription permissions for SQS
+  statement {
+    effect = "Allow"
+    actions = [
+      "sns:Subscribe",
+      "sns:Unsubscribe",
+      "sns:ListSubscriptions",
+      "sns:ListSubscriptionsByTopic",
+      "sns:GetSubscriptionAttributes",
+      "sns:SetSubscriptionAttributes"
+    ]
+    resources = [
+      "arn:aws:sns:*:*:s3-event-notification-topic",
+      "arn:aws:sns:*:*:s3-event-notification-topic:*"
     ]
   }
 
