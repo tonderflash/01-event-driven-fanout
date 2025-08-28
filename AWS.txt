@@ -1,0 +1,9 @@
+-AWS
+    S3,
+    SNS,
+    SQS,
+    LAMBDA,
+    DynamoDB,
+    CloudWatch,
+    IAM
+

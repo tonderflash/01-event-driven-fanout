@@ -1,0 +1,16 @@
+1) Event-Driven + Fanout (S3 → SNS → SQS/Lambda)
+
+Objetivo: reaccionar a eventos y distribuir el mismo mensaje a varios consumidores.
+
+Servicios: S3, SNS, SQS, Lambda, IAM, CloudWatch.
+Flujo: subir un .json a S3 ⇒ evento a SNS ⇒ dos suscriptores: (a) SQS + Lambda consumer, (b) Lambda directa.
+
+Entregables mínimos:
+
+Lambda A: valida schema y guarda metadata en DynamoDB.
+
+Lambda B: genera una “mini-respuesta” y la publica en otra cola (pipe).
+
+IaC simple (SAM/CloudFormation/Terraform) + README.
+Checklist Domain 1: event-driven, fanout, desacoplamiento, asíncrono, uso SDKs, mensajería, idempotencia en consumidores (SQS puede duplicar).
+Stretch: DLQ para la cola principal + retries con backoff y jitter.
