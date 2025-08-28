@@ -11,7 +11,11 @@ data "aws_iam_policy_document" "topic" {
 
     actions   = ["SNS:Publish"]
     resources = ["arn:aws:sns:*:*:s3-event-notification-topic"]
-
+    condition {
+      test     = "ArnLike"
+      variable = "aws:SourceArn"
+      values   = [aws_s3_bucket.bucket.arn]
+    }
   }
 }
 

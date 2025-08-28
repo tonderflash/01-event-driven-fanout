@@ -11,12 +11,12 @@ terraform {
   }
 
   backend "s3" {
-    bucket         = "event-driven-app-tf-state"
+    bucket               = "event-driven-app-tf-state"
     key                  = "tf-state-deploy"
     workspace_key_prefix = "tf-state-deploy-env"
     region               = "us-east-2"
     encrypt              = true
-    dynamodb_table = "event-driven-app-tf-lock"
+    dynamodb_table       = "event-driven-app-tf-lock"
   }
 }
 
