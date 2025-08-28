@@ -60,13 +60,20 @@ data "aws_iam_policy_document" "deploy_resources" {
     actions = [
       "s3:CreateBucket",
       "s3:DeleteBucket",
+      "s3:ListBucket",
+      "s3:HeadBucket",
+      "s3:GetBucketLocation",
+      "s3:GetBucketVersioning",
+      "s3:PutBucketVersioning",
       "s3:PutBucketNotification",
       "s3:GetBucketNotification",
       "s3:PutBucketTagging",
       "s3:GetBucketTagging",
       "s3:PutBucketPolicy",
       "s3:GetBucketPolicy",
-      "s3:DeleteBucketPolicy"
+      "s3:DeleteBucketPolicy",
+      "s3:PutBucketAcl",
+      "s3:GetBucketAcl"
     ]
     resources = [
       "arn:aws:s3:::event-driven-orders-*",
