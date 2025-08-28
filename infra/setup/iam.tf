@@ -54,26 +54,69 @@ resource "aws_iam_user_policy_attachment" "tf_backend" {
 #########################################################
 
 data "aws_iam_policy_document" "deploy_resources" {
-  # S3 permissions
+  # S3 permissions - Comprehensive list for Terraform management
   statement {
     effect = "Allow"
     actions = [
+      # Basic bucket operations
       "s3:CreateBucket",
       "s3:DeleteBucket",
       "s3:ListBucket",
       "s3:HeadBucket",
       "s3:GetBucketLocation",
+      
+      # Versioning
       "s3:GetBucketVersioning",
       "s3:PutBucketVersioning",
+      
+      # Notifications
       "s3:PutBucketNotification",
       "s3:GetBucketNotification",
+      
+      # Tagging
       "s3:PutBucketTagging",
       "s3:GetBucketTagging",
+      
+      # Policies and ACLs
       "s3:PutBucketPolicy",
       "s3:GetBucketPolicy",
       "s3:DeleteBucketPolicy",
       "s3:PutBucketAcl",
-      "s3:GetBucketAcl"
+      "s3:GetBucketAcl",
+      
+      # CORS
+      "s3:GetBucketCORS",
+      "s3:PutBucketCORS",
+      "s3:DeleteBucketCORS",
+      
+      # Encryption
+      "s3:GetEncryptionConfiguration",
+      "s3:PutEncryptionConfiguration",
+      
+      # Lifecycle
+      "s3:GetLifecycleConfiguration",
+      "s3:PutLifecycleConfiguration",
+      
+      # Public Access Block
+      "s3:GetBucketPublicAccessBlock",
+      "s3:PutBucketPublicAccessBlock",
+      
+      # Logging
+      "s3:GetBucketLogging",
+      "s3:PutBucketLogging",
+      
+      # Website configuration
+      "s3:GetBucketWebsite",
+      "s3:PutBucketWebsite",
+      "s3:DeleteBucketWebsite",
+      
+      # Replication
+      "s3:GetReplicationConfiguration",
+      "s3:PutReplicationConfiguration",
+      
+      # Request payment
+      "s3:GetBucketRequestPayment",
+      "s3:PutBucketRequestPayment"
     ]
     resources = [
       "arn:aws:s3:::event-driven-orders-*",
