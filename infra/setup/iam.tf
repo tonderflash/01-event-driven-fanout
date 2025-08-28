@@ -116,7 +116,11 @@ data "aws_iam_policy_document" "deploy_resources" {
       
       # Request payment
       "s3:GetBucketRequestPayment",
-      "s3:PutBucketRequestPayment"
+      "s3:PutBucketRequestPayment",
+      
+      # Transfer acceleration
+      "s3:GetAccelerateConfiguration",
+      "s3:PutAccelerateConfiguration"
     ]
     resources = [
       "arn:aws:s3:::event-driven-orders-*",
