@@ -1,0 +1,32 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - prod
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set vars
+        run: |
+          if [[ $GITHUB_REF == 'refs/heads/prod' ]]; then
+            echo "prod" > .workspace
+          else
+          echo "staging" > .workspace
+          fi
+      - name: Terraform Apply
+        env:
+          AWS_ACCESS_KEY_ID: ${{ vars.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          workspace=$(cat .workspace)
+          cd infra/
+          docker compose run --rm terraform -chdir=deploy/ init
+          docker compose run --rm terraform -chdir=deploy/ workspace select -or-create $workspace
+          docker compose run --rm terraform -chdir=deploy/ apply -auto-approve
