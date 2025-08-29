@@ -17,3 +17,8 @@ variable "contact" {
   description = "The contact email for the project"
   default     = "g594@gmail.com"
 }
+
+variable "lambda_execution_role_arn" {
+  description = "ARN del rol de ejecucion de Lambda preexistente"
+  type        = string
+}

@@ -239,3 +239,115 @@ resource "aws_iam_user_policy_attachment" "deploy_resources" {
   policy_arn = aws_iam_policy.deploy_resources.arn
 }
 
+#########################################################
+# Policy for Lambda resources                           #
+#########################################################
+
+data "aws_iam_policy_document" "lambda_resources" {
+  # Lambda permissions
+  statement {
+    effect = "Allow"
+    actions = [
+      "lambda:CreateFunction",
+      "lambda:DeleteFunction",
+      "lambda:GetFunction",
+      "lambda:GetFunctionConfiguration",
+      "lambda:UpdateFunctionCode",
+      "lambda:UpdateFunctionConfiguration",
+      "lambda:ListFunctions",
+      "lambda:ListVersionsByFunction",
+      "lambda:ListAliases",
+      "lambda:TagResource",
+      "lambda:UntagResource",
+      "lambda:ListTags",
+      "lambda:PublishVersion",
+      "lambda:CreateAlias",
+      "lambda:DeleteAlias",
+      "lambda:UpdateAlias",
+      "lambda:InvokeFunction",
+      "lambda:GetFunctionUrl",
+      "lambda:CreateFunctionUrlConfig",
+      "lambda:DeleteFunctionUrlConfig",
+      "lambda:UpdateFunctionUrlConfig"
+    ]
+    resources = [
+      "arn:aws:lambda:*:*:function:order-consumer-lambda",
+      "arn:aws:lambda:*:*:function:order-consumer-lambda:*"
+    ]
+  }
+
+  # Lambda Event Source Mapping permissions
+  statement {
+    effect = "Allow"
+    actions = [
+      "lambda:CreateEventSourceMapping",
+      "lambda:DeleteEventSourceMapping",
+      "lambda:GetEventSourceMapping",
+      "lambda:ListEventSourceMappings",
+      "lambda:UpdateEventSourceMapping"
+    ]
+    resources = ["*"]
+  }
+
+  # IAM permissions for Lambda execution roles
+  statement {
+    effect = "Allow"
+    actions = [
+      "iam:CreateRole",
+      "iam:DeleteRole",
+      "iam:GetRole",
+      "iam:PutRolePolicy",
+      "iam:DeleteRolePolicy",
+      "iam:AttachRolePolicy",
+      "iam:DetachRolePolicy",
+      "iam:PassRole",
+      "iam:TagRole",
+      "iam:UntagRole",
+      "iam:ListRoleTags",
+      "iam:ListAttachedRolePolicies",
+      "iam:ListRolePolicies"
+    ]
+    resources = [
+      "arn:aws:iam::*:role/lambda-execution-role-*"
+    ]
+  }
+
+  # CloudWatch Logs permissions for Lambda
+  statement {
+    effect = "Allow"
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:DeleteLogGroup",
+      "logs:DescribeLogGroups",
+      "logs:ListTagsLogGroup",
+      "logs:TagLogGroup",
+      "logs:UntagLogGroup"
+    ]
+    resources = [
+      "arn:aws:logs:*:*:log-group:/aws/lambda/order-consumer-lambda:*"
+    ]
+  }
+
+  # SQS permissions for Lambda event source mapping
+  statement {
+    effect = "Allow"
+    actions = [
+      "sqs:GetQueueAttributes",
+      "sqs:SetQueueAttributes"
+    ]
+    resources = [
+      "arn:aws:sqs:*:*:orders-processing-queue"
+    ]
+  }
+}
+
+resource "aws_iam_policy" "lambda_resources" {
+  name        = "${aws_iam_user.cd.name}-lambda-resources"
+  description = "Allow user to create and manage Lambda functions and related resources"
+  policy      = data.aws_iam_policy_document.lambda_resources.json
+}
+
+resource "aws_iam_user_policy_attachment" "lambda_resources" {
+  user       = aws_iam_user.cd.name
+  policy_arn = aws_iam_policy.lambda_resources.arn
+}
